@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from email import encoders
 import os
 import random
+import smtplib
 
 # Начальный шаблон в Excel
 import xlwt
@@ -26,8 +27,6 @@ ws = wb.add_sheet('Лист 1')
 
 
 # ws.write(0, 0, "Месяц", style0)
-y = ["Январе", "Феврале", "Марте", "Апреле", "Мае", "Июне", "Июле", "Августе", "Сентябре", "Октябре", "Ноябре",
-     "Декабре"]
 i = 0
 namber = 1
 
@@ -87,30 +86,15 @@ wb.save('example.xls')
 filepath = 'example.xls'
 
 
-#list = [1, 2, 3]
-
-#mas = random.choice(list)
-
-
-mas = random.choice([1, 2, 3])
-
-if mas < 1:
-    toaddr = "grishinartyomvladimirovich@gmail.com"
-    print("e-mail ", toaddr)
-elif mas >1:
-    toaddr = "ilend1969@gmail.com"
-    print("e-mail ", toaddr)
-else:
-    toaddr = "krolikipravdino@gmail.com"
-    print("e-mail ", toaddr)
-
-print(toaddr)
+e_maill = ['<hencerartem@gmail.com>', '<hrishinartem@gmail.com>', '<grishinartyomvladimirovich@gmail.com>']
 
 def send_mail():
-    global filepath, toaddr
-    login = "testartem1989@mail.ru"
-    password = "artemida1artemida"
-    url = "smtp.mail.ru"
+    global filepath, e_maill
+    me = 'From: My Name <testartem1989@mail.ru>'
+    you = 'To: ' + ', '.join(e_maill)
+    url = "smtp.mail.ru" # Сервер отпраитель
+    login = "testartem1989@mail.ru" # Адрес отправителя
+    password = "artemida1artemida" # Пароль отправителя
     topic = "Proba3"
 
     # Compose attachment
@@ -119,18 +103,38 @@ def send_mail():
     encoders.encode_base64(part)
     part.add_header('Content-Disposition', "attachment; filename= %s" % os.path.basename(filepath))
 
-    msg = MIMEMultipart()
 
+    # Формируем заголовок письма
+    msg = MIMEMultipart('mixed')
     msg['Subject'] = topic
     msg['From:'] = login
-    msg.attach(part)
+    msg['To'] = ', '.join(e_maill[0:2])  # отправка 2-м адресаиам
+    msg['cc'] = ', '.join([e_maill[2]])  # отправка копии 1-му адресату
 
+    msg.attach(part)
 
 
     server = root.SMTP_SSL(url, 465)
     server.login(login, password)
-    server.sendmail(login, toaddr, msg.as_string())
+    server.sendmail(login, e_maill, msg.as_string())
 
+"""
+mas = random.choice([1, 2, 3])
+
+def mas_prov():
+    if mas < 1:
+        toaddr = "grishinartyomvladimirovich@gmail.com"
+        send_mail()
+        print("e-mail ", toaddr)
+    elif mas > 1:
+        toaddr = "hencerartem@gmail.com"
+        send_mail()
+        print("e-mail ", toaddr)
+    else:
+        toaddr = "hrishinartem@gmail.com"
+        send_mail()
+        print("e-mail ", toaddr)
+"""
 
 def main():
     send_mail()
