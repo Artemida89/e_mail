@@ -86,7 +86,7 @@ wb.save('example.xls')
 filepath = 'example.xls'
 
 
-e_maill = ['<hencerartem@gmail.com>', '<hrishinartem@gmail.com>', '<grishinartyomvladimirovich@gmail.com>']
+e_maill = 'grishinartyomvladimirovich@gmail.com'
 
 def send_mail():
     global filepath, e_maill
